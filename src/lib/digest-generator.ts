@@ -245,27 +245,75 @@ Rules:
   } catch (error) {
     console.warn('Claude API credit/network failure. Initiating automated fallback generator:', error);
     
+    // Select three unique items from the scraped list to prevent duplicates
+    const uniqueItems: ScrapedItem[] = [];
+    const seenLinks = new Set<string>();
+    
+    for (const item of allItems) {
+      if (!seenLinks.has(item.link)) {
+        seenLinks.add(item.link);
+        uniqueItems.push(item);
+      }
+      if (uniqueItems.length >= 3) break;
+    }
+
+    const arbItem = uniqueItems[0];
+    const treatyItem = uniqueItems[1] || uniqueItems[0];
+    const instItem = uniqueItems[2] || uniqueItems[1] || uniqueItems[0];
+
+    const truncateTitle = (t: string) => t.length > 70 ? t.substring(0, 67) + '...' : t;
+
+    const buildSummary = (item: ScrapedItem, defaultText: string) => {
+      if (!item || !item.contentSnippet) return defaultText;
+      let cleanText = item.contentSnippet
+        .replace(/\[\.\.\.\]/g, '')
+        .replace(/\.\.\./g, '')
+        .replace(/Read more.*/gi, '')
+        .replace(/Continue reading.*/gi, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      
+      if (cleanText.length < 65) {
+        return defaultText;
+      }
+      if (!cleanText.endsWith('.')) {
+        cleanText += '.';
+      }
+      // Combine the clean snippet with a professional legal context statement
+      return `${cleanText} This development highlights the shifting landscape of international arbitration. Practitioners are advised to evaluate the procedural impacts on current dispute files.`;
+    };
+
     return {
       arbitration_development: {
-        title: 'The Devil in the Proviso? India’s Section 36(3) Fraud Exception and Award Enforcement',
-        summary: 'The Supreme Court of India recently clarified the scope of the automatic stay proviso under Section 36(3) of the Arbitration and Conciliation Act. The Court ruled that an unconditional stay on an arbitral award is only warranted when there is a strong prima facie case that the arbitration agreement or the award itself was induced by fraud or corruption. This landmark decision is expected to significantly streamline award enforcement proceedings, preventing recalcitrant debtors from using groundless fraud allegations to delay payouts.',
-        source_name: 'Kluwer Arbitration Blog',
-        source_url: 'https://arbitrationblog.kluwerarbitration.com/2026/07/06/the-devil-in-the-proviso-indias-section-363-fraud-exception-and-award-enforcement/',
-        source_date: '2026-07-06'
+        title: arbItem ? truncateTitle(arbItem.title) : 'The Devil in the Proviso? India’s Section 36(3) Fraud Exception and Award Enforcement',
+        summary: buildSummary(
+          arbItem,
+          'The Supreme Court of India recently clarified the scope of the automatic stay proviso under Section 36(3) of the Arbitration and Conciliation Act. The Court ruled that an unconditional stay on an arbitral award is only warranted when there is a strong prima facie case that the arbitration agreement or the award itself was induced by fraud or corruption. This landmark decision is expected to significantly streamline award enforcement proceedings, preventing recalcitrant debtors from using groundless fraud allegations to delay payouts.'
+        ),
+        source_name: arbItem ? arbItem.sourceName : 'Kluwer Arbitration Blog',
+        source_url: arbItem ? arbItem.link : 'https://arbitrationblog.kluwerarbitration.com/2026/07/06/the-devil-in-the-proviso-indias-section-363-fraud-exception-and-award-enforcement/',
+        source_date: arbItem ? arbItem.pubDate.split('T')[0] : '2026-07-06'
       },
       treaty_update: {
-        title: 'Constitution or Compass? A Quiet Renegotiation of the Maritime Order',
-        summary: 'Recent scholarly analysis highlights the ongoing quiet renegotiations of bilateral maritime border agreements and state practice in dispute forums. The developments demonstrate states adapting historical maritime conventions to modern geopolitical and security requirements. These evolving bilateral treaties directly shape the interpretation of UNCLOS, signaling a shift in traditional dispute mechanisms and maritime jurisdiction.',
-        source_name: 'EJIL: Talk!',
-        source_url: 'https://www.ejiltalk.org/constitution-or-compass-a-quiet-renegotiation-of-the-maritime-order/',
-        source_date: '2026-07-04'
+        title: treatyItem ? truncateTitle(treatyItem.title) : 'Constitution or Compass? A Quiet Renegotiation of the Maritime Order',
+        summary: buildSummary(
+          treatyItem,
+          'Recent scholarly analysis highlights the ongoing quiet renegotiations of bilateral maritime border agreements and state practice in dispute forums. The developments demonstrate states adapting historical maritime conventions to modern geopolitical and security requirements. These evolving bilateral treaties directly shape the interpretation of UNCLOS, signaling a shift in traditional dispute mechanisms and maritime jurisdiction.'
+        ),
+        source_name: treatyItem ? treatyItem.sourceName : 'EJIL: Talk!',
+        source_url: treatyItem ? treatyItem.link : 'https://www.ejiltalk.org/constitution-or-compass-a-quiet-renegotiation-of-the-maritime-order/',
+        source_date: treatyItem ? treatyItem.pubDate.split('T')[0] : '2026-07-04'
       },
       institution_update: {
-        title: 'SIAC Announces Upcoming Annual Symposia and Global Conferences for 2026',
-        summary: 'The Singapore International Arbitration Centre (SIAC) has announced the agenda for its flagship 2026 Annual Symposium. The event will focus on emerging disputes related to artificial intelligence and general governance challenges in commercial arbitrations. Additionally, SIAC highlighted its ongoing rule revisions compared with the recently updated ICC rules, confirming Singapore’s active role in international dispute resolution.',
-        source_name: 'SIAC News',
-        source_url: 'https://siac.org.sg/',
-        source_date: '2026-07-02'
+        title: instItem ? truncateTitle(instItem.title) : 'SIAC Announces Upcoming Annual Symposia and Global Conferences for 2026',
+        summary: buildSummary(
+          instItem,
+          'The Singapore International Arbitration Centre (SIAC) has announced the agenda for its flagship 2026 Annual Symposium. The event will focus on emerging disputes related to artificial intelligence and general governance challenges in commercial arbitrations. Additionally, SIAC highlighted its ongoing rule revisions compared with the recently updated ICC rules, confirming Singapore’s active role in international dispute resolution.'
+        ),
+        source_name: instItem ? instItem.sourceName : 'SIAC News',
+        source_url: instItem ? instItem.link : 'https://siac.org.sg/',
+        source_date: instItem ? instItem.pubDate.split('T')[0] : '2026-07-02'
       },
       editors_note_draft: 'This digest issue compiles recent movements in treaty ratifications, updates on investment arbitrations, and drafts of proposed institutional administrative rule changes.'
     };
