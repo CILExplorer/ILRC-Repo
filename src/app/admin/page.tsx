@@ -1,14 +1,26 @@
-import { redirect } from 'next/navigation';
+import { redirect, notFound } from 'next/navigation';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { query } from '@/lib/db';
 import DashboardClient from './DashboardClient';
 
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
 export const revalidate = 0;
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   // 1. Check if authenticated
   if (!(await isAdminAuthenticated())) {
-    redirect('/admin/login');
+    const resolvedParams = await searchParams;
+    const access = resolvedParams.access;
+    if (access === 'cilexplorer') {
+      redirect('/admin/login?access=cilexplorer');
+    } else {
+      notFound(); // Hides dashboard under 404 page
+    }
   }
 
   let subscriberCount = 0;
