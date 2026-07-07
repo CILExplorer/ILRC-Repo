@@ -266,22 +266,24 @@ Rules:
     const buildSummary = (item: ScrapedItem, defaultText: string) => {
       if (!item || !item.contentSnippet) return defaultText;
       let cleanText = item.contentSnippet
-        .replace(/\[\.\.\.\]/g, '')
-        .replace(/\.\.\./g, '')
+        .replace(/[\u2026]/g, '')             // Remove unicode ellipsis
+        .replace(/\.{2,}/g, '')               // Remove two or more consecutive dots (.., ..., ...., etc.)
+        .replace(/\[\s*\.?\s*\]/g, '')        // Remove brackets like [], [.]
         .replace(/Read more.*/gi, '')
         .replace(/Continue reading.*/gi, '')
         .replace(/&nbsp;/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
       
+      // Clean up any trailing punctuation at the end before adding our period
+      cleanText = cleanText.replace(/[.,\s\u2026]+$/, '').trim();
+
       if (cleanText.length < 65) {
         return defaultText;
       }
-      if (!cleanText.endsWith('.')) {
-        cleanText += '.';
-      }
-      // Combine the clean snippet with a professional legal context statement
-      return `${cleanText} This development highlights the shifting landscape of international arbitration. Practitioners are advised to evaluate the procedural impacts on current dispute files.`;
+      
+      // Add a single clean period and a professional legal context statement
+      return `${cleanText}. This development highlights the shifting landscape of international arbitration. Practitioners are advised to evaluate the procedural impacts on current dispute files.`;
     };
 
     return {
