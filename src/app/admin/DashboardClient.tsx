@@ -145,7 +145,7 @@ export default function DashboardClient({
   return (
     <div>
       {/* Top Header Row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2.25rem', fontFamily: 'var(--font-serif)', margin: 0 }}>
             Editorial Dashboard
@@ -212,7 +212,7 @@ export default function DashboardClient({
         </h2>
 
         {pendingDigests.length > 0 ? (
-          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
               <thead>
                 <tr style={{ backgroundColor: 'var(--color-surface-hover)', borderBottom: '1px solid var(--color-border)' }}>
@@ -274,7 +274,7 @@ export default function DashboardClient({
         </div>
 
         {caseNotes.length > 0 ? (
-          <div className="card" style={{ padding: 0, overflow: 'hidden', marginTop: '1rem' }}>
+          <div className="card" style={{ padding: 0, overflowX: 'auto', marginTop: '1rem' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
               <thead>
                 <tr style={{ backgroundColor: 'var(--color-surface-hover)', borderBottom: '1px solid var(--color-border)' }}>
@@ -340,7 +340,7 @@ export default function DashboardClient({
         </h2>
 
         {publishedDigests.length > 0 ? (
-          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className="card" style={{ padding: 0, overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
               <thead>
                 <tr style={{ backgroundColor: 'var(--color-surface-hover)', borderBottom: '1px solid var(--color-border)' }}>

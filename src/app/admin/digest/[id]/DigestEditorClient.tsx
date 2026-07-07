@@ -165,7 +165,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
   return (
     <div>
       {/* Editorial Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)', margin: 0 }}>
             {digest.status === 'published' ? 'Edit Published Digest' : 'Digest Editorial Workspace'}
@@ -197,7 +197,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
       )}
 
       {/* Main Workspace Form */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
+      <div className="admin-form-grid">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
           {/* Custom Issue Name Field */}
@@ -260,7 +260,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
                 onChange={(e) => setArbSummary(e.target.value)}
               />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-3cols">
               <div className="form-group">
                 <label className="form-label" htmlFor="arb-source-name-field">Source Name</label>
                 <input
@@ -320,7 +320,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
                 onChange={(e) => setTreatySummary(e.target.value)}
               />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-3cols">
               <div className="form-group">
                 <label className="form-label" htmlFor="treaty-source-name-field">Source Name</label>
                 <input
@@ -380,7 +380,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
                 onChange={(e) => setInstSummary(e.target.value)}
               />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-3cols">
               <div className="form-group">
                 <label className="form-label" htmlFor="inst-source-name-field">Source Name</label>
                 <input

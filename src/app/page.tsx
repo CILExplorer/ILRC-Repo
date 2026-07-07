@@ -82,7 +82,7 @@ export default async function HomePage() {
           </p>
         </section>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '3rem' }}>
+        <div className="home-layout-grid">
           {/* Left Column: Latest Digest */}
           <section>
             <h2 style={{ fontSize: '1.8rem', borderBottom: '2px solid var(--color-primary)', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>

@@ -120,7 +120,7 @@ export default function CaseNoteEditorClient({ caseNote }: { caseNote: CaseNote 
   return (
     <div>
       {/* Editorial Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)', margin: 0 }}>
             {caseNote.status === 'published' ? 'Edit Published Case Note' : 'Review Generated Case Note'}
@@ -149,7 +149,7 @@ export default function CaseNoteEditorClient({ caseNote }: { caseNote: CaseNote 
       )}
 
       {/* Workspace Split Layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
+      <div className="admin-form-grid">
         
         {/* Left Column: Case Note Sections */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
