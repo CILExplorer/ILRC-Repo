@@ -125,17 +125,16 @@ function cleanAndParseJSON(text: string): GeneratedDigest {
 
 export async function generateDigestFromSources(): Promise<GeneratedDigest> {
   const feeds = [
-    { name: 'Kluwer Arbitration Blog', url: 'https://arbitrationblog.kluwerarbitration.com/feed/' },
     { name: 'EJIL: Talk!', url: 'https://www.ejiltalk.org/feed/' },
-    { name: 'Jus Mundi Blog', url: 'https://jusmundi.com/en/blog/feed/' }, // Standard feed path
-    { name: 'ICSID News', url: 'https://icsid.worldbank.org/news/rss' },
-    { name: 'UN News International Law', url: 'https://news.un.org/feed/subscribe/en/news/topic/international-law/feed/rss.xml' },
+    { name: 'Opinio Juris', url: 'https://opiniojuris.org/feed/' },
+    { name: 'The International Law Blog', url: 'https://internationallawblog.com/feed/' },
+    { name: 'ASIL Insights', url: 'https://www.asil.org/insights/rss.xml' },
+    { name: 'CIEL Blog', url: 'https://www.ciel.org/feed/' }
   ];
 
-  const results = await Promise.allSettled([
-    scrapeSIAC(),
-    ...feeds.map(f => fetchRSS(f.url, f.name))
-  ]);
+  const results = await Promise.allSettled(
+    feeds.map(f => fetchRSS(f.url, f.name))
+  );
 
   const allItems: ScrapedItem[] = [];
   results.forEach((res) => {
@@ -247,9 +246,9 @@ Rules:
     console.warn('Claude API credit/network failure. Initiating automated fallback generator:', error);
     
     // Dynamically pull items from the crawled feeds to construct high-fidelity drafts
-    const arbItem = allItems.find(item => item.sourceName.includes('Arbitration') || item.sourceName.includes('Kluwer')) || allItems[0];
-    const treatyItem = allItems.find(item => item.sourceName.includes('EJIL') || item.title.toLowerCase().includes('treaty') || item.title.toLowerCase().includes('bit')) || allItems[1] || allItems[0];
-    const instItem = allItems.find(item => item.sourceName.includes('SIAC') || item.sourceName.includes('ICSID') || item.sourceName.includes('UN') || item.sourceName.includes('Institution')) || allItems[2] || allItems[0];
+    const arbItem = allItems.find(item => item.sourceName.includes('Opinio') || item.sourceName.includes('Blog')) || allItems[0];
+    const treatyItem = allItems.find(item => item.sourceName.includes('ASIL') || item.sourceName.includes('CIEL') || item.title.toLowerCase().includes('treaty') || item.title.toLowerCase().includes('bit')) || allItems[1] || allItems[0];
+    const instItem = allItems.find(item => item.sourceName.includes('EJIL') || item.sourceName.includes('Institution')) || allItems[2] || allItems[0];
 
     const truncateTitle = (t: string) => t.length > 70 ? t.substring(0, 67) + '...' : t;
 
