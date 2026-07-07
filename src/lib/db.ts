@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS digests (
     verified_inst BOOLEAN DEFAULT FALSE,
     
     editors_note TEXT,
-    editors_insight TEXT
+    editors_insight TEXT,
+    custom_title TEXT
 );
 
 CREATE TABLE IF NOT EXISTS case_notes (
@@ -85,6 +86,8 @@ export async function ensureSchema() {
   const p = getPool();
   try {
     await p.query(INIT_SQL);
+    // Dynamic database migration to add custom_title column to existing databases
+    await p.query('ALTER TABLE digests ADD COLUMN IF NOT EXISTS custom_title TEXT;');
     dbInitialized = true;
     console.log('Database tables verified/created successfully.');
   } catch (error) {

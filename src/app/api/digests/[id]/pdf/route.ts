@@ -65,7 +65,7 @@ export async function GET(
       doc.fillColor('#334155')
          .font('Helvetica-Bold')
          .fontSize(12)
-         .text(`Digest Issue #${digest.issue_number}`, { underline: false });
+         .text(digest.custom_title || `Digest Issue #${digest.issue_number}`, { underline: false });
 
       doc.font('Helvetica')
          .fontSize(10)
@@ -197,10 +197,14 @@ export async function GET(
       doc.end();
     });
 
+    const pdfFilename = digest.custom_title 
+      ? `ilrc-digest-${digest.custom_title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.pdf`
+      : `ilrc-digest-${digest.issue_number}.pdf`;
+
     return new Response(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=ilrc-digest-${digest.issue_number}.pdf`,
+        'Content-Disposition': `attachment; filename=${pdfFilename}`,
       },
     });
 

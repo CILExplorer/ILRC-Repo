@@ -11,6 +11,7 @@ interface Digest {
   editors_note?: string;
   editors_insight?: string;
   tags?: string[];
+  custom_title?: string;
   arb_title: string;
   arb_summary: string;
   arb_source_name: string;
@@ -79,7 +80,7 @@ export default function ArchiveListClient({ digests }: { digests: Digest[] }) {
             >
               <div>
                 <h3 style={{ fontSize: '1.35rem', margin: '0 0 0.25rem 0' }}>
-                  Issue #{digest.issue_number}
+                  {digest.custom_title || `Issue #${digest.issue_number}`}
                 </h3>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>

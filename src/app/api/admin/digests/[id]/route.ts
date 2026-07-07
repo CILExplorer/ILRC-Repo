@@ -54,7 +54,8 @@ export async function PUT(
       verified_arb, verified_treaty, verified_inst,
       editors_note, editors_insight,
       tags,
-      status // 'pending' | 'published'
+      status, // 'pending' | 'published'
+      custom_title
     } = body;
 
     // Enforce server-side verification checks on publish
@@ -97,8 +98,9 @@ export async function PUT(
         tags = $21,
         status = $22,
         published_at = $23,
-        last_edited_at = $24
-      WHERE id = $25
+        last_edited_at = $24,
+        custom_title = $25
+      WHERE id = $26
       RETURNING *
     `;
 
@@ -133,6 +135,7 @@ export async function PUT(
       targetStatus,
       publishedAt,
       lastEditedAt,
+      custom_title !== undefined ? custom_title : currentDigest.custom_title,
       id
     ];
 

@@ -14,6 +14,7 @@ interface Digest {
   editors_note?: string;
   editors_insight?: string;
   tags?: string[];
+  custom_title?: string;
   arb_title: string;
   arb_summary: string;
   arb_source_name: string;
@@ -91,7 +92,7 @@ export default async function HomePage() {
             {latestDigest ? (
               <article className="digest-article" style={{ margin: '0' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <h3 style={{ fontSize: '1.6rem' }}>Issue #{latestDigest.issue_number}</h3>
+                  <h3 style={{ fontSize: '1.6rem' }}>{latestDigest.custom_title || `Issue #${latestDigest.issue_number}`}</h3>
                   <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
                     Published on {new Date(latestDigest.published_at).toLocaleDateString('en-US', { dateStyle: 'long' })}
                     {latestDigest.last_edited_at && ` (Last edited: ${new Date(latestDigest.last_edited_at).toLocaleDateString()})`}

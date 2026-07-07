@@ -13,6 +13,7 @@ interface Digest {
   editors_note?: string;
   editors_insight?: string;
   tags?: string[];
+  custom_title?: string;
   arb_title: string;
   arb_summary: string;
   arb_source_name: string;
@@ -64,6 +65,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
   const [editorsNote, setEditorsNote] = useState(digest.editors_note || '');
   const [editorsInsight, setEditorsInsight] = useState(digest.editors_insight || '');
   const [tags, setTags] = useState(digest.tags ? digest.tags.join(', ') : '');
+  const [customTitle, setCustomTitle] = useState(digest.custom_title || '');
 
   // Verification Checkboxes
   const [verifiedArb, setVerifiedArb] = useState(digest.verified_arb);
@@ -128,6 +130,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
           editors_insight: editorsInsight,
           tags: tags,
           status: targetStatus,
+          custom_title: customTitle,
         }),
       });
 
@@ -197,6 +200,24 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
+          {/* Custom Issue Name Field */}
+          <div className="card">
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '0.5rem' }}>
+              Custom Issue Name
+            </h3>
+            <div className="form-group">
+              <label className="form-label" htmlFor="custom-title-field">Display Title (e.g., &quot;Volume 1, Issue 2&quot; or leave blank to use default &quot;Issue #{digest.issue_number}&quot;)</label>
+              <input
+                id="custom-title-field"
+                type="text"
+                className="form-control"
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                placeholder="Leave blank to use default Issue #..."
+              />
+            </div>
+          </div>
+
           {/* Editor's Note Field */}
           <div className="card">
             <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '0.5rem' }}>
@@ -552,7 +573,7 @@ export default function DigestEditorClient({ digest }: { digest: Digest }) {
                 Practitioner-oriented international law and arbitration analysis
               </p>
               <div className="digest-meta" style={{ marginTop: '1rem' }}>
-                <strong>Issue #{digest.issue_number} (PREVIEW)</strong>
+                <strong>{customTitle || `Issue #${digest.issue_number}`} (PREVIEW)</strong>
                 <span>Date: {new Date().toLocaleDateString('en-US', { dateStyle: 'long' })}</span>
               </div>
             </div>
